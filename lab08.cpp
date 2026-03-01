@@ -4,30 +4,31 @@ using namespace std;
 
 /*******************************************************************************
  * Function prototypes
-*******************************************************************************/
+ *******************************************************************************/
 
-unsigned fact(unsigned);
-unsigned fib(unsigned);
-unsigned mult(unsigned, unsigned);
-unsigned power(unsigned, unsigned);
-unsigned product(unsigned, unsigned);
+unsigned fact(unsigned, unsigned r = 1);
+unsigned fib(unsigned, unsigned a = 0, unsigned b = 1);
+unsigned mult(unsigned, unsigned, unsigned r = 0);
+unsigned power(unsigned, unsigned, unsigned r = 1);
+unsigned product(unsigned, unsigned, unsigned r = 1);
 
 /*******************************************************************************
  * Description:
  * Starting point of the program. Calls various recursive functions that can be
  * optimized using tail recursion.
- * 
+ *
  * Input:
  * N/A
  *
  * Output:
  * An integer to signal to the OS the exit code.
-*******************************************************************************/
+ *******************************************************************************/
 
-int main() {
+int main()
+{
     // try a ridiculous case that won't work without tail recursion
     cout << "6 * 123000 = " << mult(6, 123000) << endl;
-    
+
     // these functions can't demonstrate the usefulness of tail recursion
     // due to data type overflow, but still, good practice
     cout << "3 ^ 10 = " << power(3, 10) << endl;
@@ -44,63 +45,66 @@ int main() {
 /*******************************************************************************
  * Function definitions below are NOT tail recursive!
  * TODO: make them tail recursive :)
-*******************************************************************************/
+ *******************************************************************************/
 
-unsigned fact(unsigned n) {
+unsigned fact(unsigned n, unsigned result)
+{
     // base cases (combined)
-    if (n <= 1) {
-        return 1;
+    if (n <= 1)
+    {
+        return result;
     }
 
     // recursive case
-    unsigned res = fact(n - 1);
-    return res * n;
+
+    return fact(n - 1, result * n);
 }
 
-unsigned fib(unsigned n) {
+unsigned fib(unsigned n, unsigned a, unsigned b)
+{
     // base case 1
-    if (n == 0) {
-        return 0;
+    if (n == 0)
+    {
+        return a;
     }
 
-    // base case 2
-    else if (n == 1) {
-        return 1;
-    }
-
-    // recursive case
-    return fib(n - 1) + fib(n - 2);
+    return fib(n - 1, b, a + b);
 }
 
-unsigned mult(unsigned x, unsigned y) {
+unsigned mult(unsigned x, unsigned y, unsigned result)
+{
     // base case
-    if (y == 0) {
-        return 0;
+    if (y == 0)
+    {
+        return result;
     }
 
     // recursive case
-    unsigned res = mult(x, y - 1);
-    return res + x;
+
+    return mult(x, y - 1, result + x);
 }
 
-unsigned power(unsigned x, unsigned y) {
+unsigned power(unsigned x, unsigned y, unsigned result)
+{
     // base case
-    if (y == 0) {
-        return 1;
+    if (y == 0)
+    {
+        return result;
     }
 
     // recursive case
-    unsigned res = power(x, y - 1);
-    return res * x;
+
+    return power(x, y - 1, result * x);
 }
 
-unsigned product(unsigned x, unsigned y) {
+unsigned product(unsigned x, unsigned y, unsigned result)
+{
     // base case
-    if (x == y) {
-        return x;
+    if (x == y)
+    {
+        return result * y;
     }
 
     // recursive case
-    unsigned p = product(x + 1, y);
-    return p * x;
+    return product(x + 1, y, result * x);
 }
